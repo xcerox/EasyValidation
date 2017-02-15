@@ -1,4 +1,4 @@
-package org.doit.project.easyvalidation;
+package org.doit.project.easyvalidation.test;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
