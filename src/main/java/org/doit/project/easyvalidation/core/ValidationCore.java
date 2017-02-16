@@ -23,10 +23,11 @@ import org.doit.project.easyvalidation.interfaces.Validator;
 import org.doit.project.easyvalidation.util.ValidationUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ValidationCore {
-	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ValidationCore.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ValidationCore.class);
 	private static final String GET = "get";
 	private static final String IS = "is";
 	private Map<Class<?>, Validator<Object>> poolInstances;
@@ -123,112 +124,215 @@ public class ValidationCore {
 		return isGet;
 	}
 
+	/**
+	 * Validate methods gets finder
+	 * @param pojo
+	 * @param methods
+	 * @param validateOptional
+	 * @return methods with faults
+	 * @throws InternalException
+	 */
 	private Map<String, List<String>> validMethodsGet(final Object pojo, final Collection<Method> methods, boolean validateOptional)
 			throws InternalException {
-
+		LOGGER.trace(LoggerMessage.ENTER_METHOD);
+		LOGGER.debug(LoggerMessage.PARAMETER, "pojo", pojo);
+		LOGGER.debug(LoggerMessage.PARAMETER, "methods", methods);
+		LOGGER.debug(LoggerMessage.PARAMETER, "validateOptional", validateOptional);
+		
 		Map<String, List<String>> methodsFail = new HashMap<>();
 		
+		LOGGER.debug("Iterating methods");
 		for (Method currentMethod : methods) {
-
+			
+			LOGGER.debug("validating is method opcional");
 			if (currentMethod.isAnnotationPresent(IsOptional.class)
 					&& !validateOptional) {
+				LOGGER.debug("skip method opcional {}", currentMethod.getName());
 				continue;
 			}
 			
+			LOGGER.debug("fetch fauls for this method {}", currentMethod.getName());
 			List<String> faults = getfaults(pojo, currentMethod);
 			
+			LOGGER.debug("validating existing faults");
 			if (!ValidationUtil.isNullOrEmpty(faults)) {
+				LOGGER.debug("add method with faults");
 				methodsFail.put(currentMethod.getName(), faults);
 			}
 		}
 		
+		LOGGER.debug(LoggerMessage.RETURN_METHOD, methodsFail);
+		LOGGER.trace(LoggerMessage.EXIT_METHOD);
 		return methodsFail;
 	}
 	
+	/**
+	 * Return faults for a method
+	 * @param pojo
+	 * @param method
+	 * @return faults
+	 * @throws InternalException
+	 */
 	private List<String> getfaults(final Object pojo, final Method method) 
 			throws InternalException {
+		LOGGER.trace(LoggerMessage.ENTER_METHOD);
+		LOGGER.debug(LoggerMessage.PARAMETER, "pojo", pojo);
+		LOGGER.debug(LoggerMessage.PARAMETER, "method", method);
+		
 		List<String> faults = new ArrayList<>();
 		
+		LOGGER.debug("Filter annotations for annotation Validation");
 		List<Annotation> annotationsFiltered = filterAnnotation(method.getAnnotations());
 		
+		LOGGER.debug("Validating annotations filtered");
 		if (!ValidationUtil.isNullOrEmpty(annotationsFiltered)) {
+			
+			LOGGER.debug("fetch value of method");
 			Object returnValue = fetchReturnValue(pojo, method);
+			
+			LOGGER.debug(LoggerMessage.PARAMETER, "returnValue", returnValue);
 			
 			for (Annotation annotation : annotationsFiltered) {
 				
+				LOGGER.debug("find annotation Validation");
 				Validation validation = annotation.annotationType().getAnnotation(Validation.class);
 				
+				LOGGER.debug("Instance validator");
 				Validator<Object> validator = instanceValidator(validation.value());
 				
+				LOGGER.debug("fetch properties");
 				JSONObject properties = fetchPropierties(annotation);
-				System.out.println("properties: " + properties);
+				
+				LOGGER.debug(LoggerMessage.PARAMETER, "properties", properties);
 				
 				try {
-					if (validator.doValidate(returnValue, properties)) {
+					
+					LOGGER.debug("Validate method with annotationId {}", validation.id());
+					if (!validator.isValid(returnValue, properties)) {
+						LOGGER.debug("add annotation like fault");
 						faults.add(validation.id());
 					}
 				} catch (JSONException e) {
+					LOGGER.error(e.getMessage(), e);
 					throw new InternalException();
 				}
 			}
 		}
 		
+		LOGGER.debug(LoggerMessage.RETURN_METHOD, faults);
+		LOGGER.trace(LoggerMessage.EXIT_METHOD);
 		return faults;
 	}
 	
+	/**
+	 * Return new instace 
+	 * @param clazz
+	 * @return new Instance of Validator<Object>
+	 * @throws InternalException
+	 */
 	@SuppressWarnings("unchecked")
-	private Validator<Object> instanceValidator(Class<?> clazz) throws InternalException{
+	private Validator<Object> instanceValidator(Class<?> clazz) 
+			throws InternalException{
+		LOGGER.trace(LoggerMessage.ENTER_METHOD);
+		LOGGER.debug(LoggerMessage.PARAMETER, "clazz", clazz);
 		
+		Validator<Object> validator = null;
+		LOGGER.debug("Validating exist instance");
 		if (poolInstances.containsKey(clazz)) {
-			return poolInstances.get(clazz);
+			LOGGER.debug("Return instance recycled");
+			validator = poolInstances.get(clazz);
+			
 		} else {
 			try {
-				Validator<Object> validator = (Validator<Object>) clazz.newInstance();
+				LOGGER.debug("Instance new Validator");
+				validator = (Validator<Object>) clazz.newInstance();
+				 
+				LOGGER.debug("put reference in pool");
 				poolInstances.put(clazz, validator);
-				return validator;
 			} catch (InstantiationException | IllegalAccessException e) {
+				LOGGER.error(e.getMessage(), e);
 				throw new InternalException();
 			}
 		}
+		
+		LOGGER.debug(LoggerMessage.RETURN_METHOD, validator);
+		LOGGER.trace(LoggerMessage.EXIT_METHOD);
+		return validator;
 	}
 
+	/**
+	 * Return annotations filter by Validation
+	 * @param annotations
+	 * @return annotation has present Validation
+	 */
 	private List<Annotation> filterAnnotation(Annotation[] annotations) {
+		LOGGER.trace(LoggerMessage.ENTER_METHOD);
+		LOGGER.debug(LoggerMessage.PARAMETER, "annotations", annotations);
+		
 		List<Annotation> annotationsFiltered = new ArrayList<>();
 
+		LOGGER.debug("Iterating annotations");
 		for (Annotation annotation : annotations) {
+			
+			LOGGER.debug("Validating is present Validation");
 			if (annotation.annotationType().isAnnotationPresent(Validation.class)) {
+				LOGGER.debug("Add annotations");
 				annotationsFiltered.add(annotation);
 			}
 		}
 
+		LOGGER.debug(LoggerMessage.RETURN_METHOD, annotationsFiltered);
+		LOGGER.trace(LoggerMessage.EXIT_METHOD);
 		return annotationsFiltered;
 	}
 
-	private JSONObject fetchPropierties(Annotation annotation) throws InternalException{
+	/**
+	 * Return property of annotation with it value
+	 * @param annotation
+	 * @return propery for Validations
+	 * @throws InternalException
+	 */
+	private JSONObject fetchPropierties(Annotation annotation) 
+			throws InternalException{
+		LOGGER.trace(LoggerMessage.ENTER_METHOD);
+		LOGGER.debug(LoggerMessage.PARAMETER, "annotation", annotation);
+		
 		JSONObject propierties = new JSONObject();
 		
+		LOGGER.debug("Iteranting methods of annotations");
 		for (Method currentMethod : annotation.annotationType().getMethods()) {
 			
+			LOGGER.debug("get annotation Property");
 			Property property = currentMethod.getAnnotation(Property.class);
 			
+			LOGGER.debug("Validating annotation");
 			if (!ValidationUtil.isNull(property)) {
 				
 				String propertyName = property.value();
 				
+				LOGGER.debug("Validating propertyName is for default in annotation");
 				if (propertyName.equals(Empty.STRING)) {
+					
+					LOGGER.debug("Asigning name of method: {}", currentMethod.getName());
 					propertyName = currentMethod.getName();
 				}
 				 
+				LOGGER.debug("fetch value on method");
 				Object value = fetchReturnValue(annotation, currentMethod);
 				
+				LOGGER.debug(LoggerMessage.PARAMETER, "value return", value);
 				try{
+					LOGGER.debug("put property name and value");
 					propierties.put(propertyName, value);		
 				} catch (JSONException e) {
+					LOGGER.error(e.getMessage(), e);
 					throw new InternalException();
 				}
 			}
 		}
 
+		LOGGER.debug(LoggerMessage.RETURN_METHOD, propierties);
+		LOGGER.trace(LoggerMessage.EXIT_METHOD);
 		return propierties;
 	}
 	

@@ -1,8 +1,8 @@
 package org.doit.project.easyvalidation.test;
 
-import org.doit.projectvalidation.annotations.Lenght;
-import org.doit.projectvalidation.annotations.NotNull;
-import org.doit.projectvalidation.annotations.Optional;
+import org.doit.project.easyvalidation.annotations.IsOptional;
+import org.doit.project.easyvalidation.annotations.Lenght;
+import org.doit.project.easyvalidation.annotations.NotNull;
 
 public class Pojo {
 	
@@ -14,6 +14,7 @@ public class Pojo {
 		super();
 	}
 
+	@NotNull
 	public String getNombre() {
 		return nombre;
 	}
@@ -23,7 +24,7 @@ public class Pojo {
 	}
 
 	@IsOptional
-	@Lenght(min = 35)
+	@Lenght(min = 5)
 	public String getApellido() {
 		return Apellido;
 	}
@@ -32,6 +33,7 @@ public class Pojo {
 		Apellido = apellido;
 	}
 
+	@NotNull
 	public Integer getEdad() {
 		return edad;
 	}

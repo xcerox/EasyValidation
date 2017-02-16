@@ -1,8 +1,8 @@
 package org.doit.project.easyvalidation.interfaces.impl;
 
+import org.doit.project.easyvalidation.exceptions.InternalException;
 import org.doit.project.easyvalidation.interfaces.Validator;
-import org.doit.projectvalidation.exceptions.ValidationFailException;
-import org.doit.projectvalidation.exceptions.ValidationIncorrectException;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class InStringsValidator implements Validator<String>{
@@ -12,9 +12,8 @@ public class InStringsValidator implements Validator<String>{
 	}
 
 	@Override
-	public void doValidate(String tipo, JSONObject propierties)
-			throws ValidationIncorrectException, ValidationFailException {
-		
+	public boolean isValid(String value, JSONObject propierties) throws InternalException, JSONException {
+		// TODO Auto-generated method stub
+		return false;
 	}
-
 }

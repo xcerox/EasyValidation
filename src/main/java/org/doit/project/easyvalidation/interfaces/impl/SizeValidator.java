@@ -1,8 +1,8 @@
 package org.doit.project.easyvalidation.interfaces.impl;
 
+import org.doit.project.easyvalidation.exceptions.InternalException;
 import org.doit.project.easyvalidation.interfaces.Validator;
-import org.doit.projectvalidation.exceptions.ValidationFailException;
-import org.doit.projectvalidation.exceptions.ValidationIncorrectException;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class SizeValidator implements Validator<Long> {
@@ -12,10 +12,8 @@ public class SizeValidator implements Validator<Long> {
 	}
 
 	@Override
-	public void doValidate(Long tipo, JSONObject propierties)
-			throws ValidationIncorrectException, ValidationFailException {
+	public boolean isValid(Long value, JSONObject propierties) throws InternalException, JSONException {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
-
 }

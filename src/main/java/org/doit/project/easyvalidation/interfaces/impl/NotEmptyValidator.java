@@ -2,9 +2,9 @@ package org.doit.project.easyvalidation.interfaces.impl;
 
 import java.util.Collection;
 
+import org.doit.project.easyvalidation.exceptions.InternalException;
 import org.doit.project.easyvalidation.interfaces.Validator;
-import org.doit.projectvalidation.exceptions.ValidationFailException;
-import org.doit.projectvalidation.exceptions.ValidationIncorrectException;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class NotEmptyValidator implements Validator<Collection<?>>{
@@ -14,10 +14,9 @@ public class NotEmptyValidator implements Validator<Collection<?>>{
 	}
 
 	@Override
-	public void doValidate(Collection<?> tipo, JSONObject propierties)
-			throws ValidationIncorrectException, ValidationFailException {
+	public boolean isValid(Collection<?> value, JSONObject propierties) throws InternalException, JSONException {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 }

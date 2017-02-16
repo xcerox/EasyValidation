@@ -1,42 +1,64 @@
 package org.doit.project.easyvalidation.interfaces.impl;
 
+import org.doit.project.easyvalidation.consts.Empty;
+import org.doit.project.easyvalidation.consts.LoggerMessage;
+import org.doit.project.easyvalidation.exceptions.InternalException;
 import org.doit.project.easyvalidation.interfaces.Validator;
-import org.doit.projectvalidation.exceptions.ValidationFailException;
-import org.doit.projectvalidation.exceptions.ValidationIncorrectException;
+import org.doit.project.easyvalidation.util.ValidationUtil;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LenghtValidator implements Validator<String>{
+	private static final Logger LOGGER = LoggerFactory.getLogger(LenghtValidator.class);
 
 	public LenghtValidator() {
 		super();
 	}
-
+	
 	@Override
-	public void doValidate(String tipo, JSONObject propierties)
-			throws ValidationIncorrectException, ValidationFailException {
-		System.out.println("Entering doValidate");
+	public boolean isValid(String value, JSONObject propierties) 
+			throws InternalException, JSONException {
+		LOGGER.trace(LoggerMessage.ENTER_METHOD);
+		LOGGER.debug(LoggerMessage.PARAMETER, "value", value);
+		LOGGER.debug(LoggerMessage.PARAMETER, "propierties", propierties);
 		
-		Integer min = null;
-		Integer max = null;
-		
-		try {
-			min = propierties.getInt("min")>0?propierties.getInt("min"):null;
-			max = propierties.getInt("max")>0?propierties.getInt("max"):null;
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
+		LOGGER.debug("validating it value is null");
+		if (ValidationUtil.isNull(value)) {
+			LOGGER.debug("it value is null");
+			LOGGER.debug(LoggerMessage.RETURN_METHOD, false);
+			LOGGER.trace(LoggerMessage.EXIT_METHOD);
+			
+			return false;
 		}
 		
-		if (min != null) {
-			if (tipo.length() < min) {
-				System.out.println("Es menor");
+		LOGGER.debug("get values in properties");
+		int max = propierties.getInt("max");
+		int min = propierties.getInt("min");
+		
+		boolean esValidMin = true;
+		boolean esValidMax = true;
+		
+		LOGGER.debug("Validating min");
+		if (Empty.INTEGER != min) {
+			if (value.length() < min) {
+				LOGGER.debug("fail of min");
+				esValidMin = false;
 			}
 		}
 		
-		if (max != null) {
-			if (tipo.length() > max) {
-				System.out.println("Es mayor");
+		LOGGER.debug("Validating max");
+		if (Empty.INTEGER != max) {
+			if (value.length() > max) {
+				LOGGER.debug("fail of max");
+				esValidMax = false;
 			}
 		}
-
+		
+		LOGGER.debug(LoggerMessage.RETURN_METHOD, esValidMin && esValidMax);
+		LOGGER.trace(LoggerMessage.EXIT_METHOD);
+		return esValidMin && esValidMax;
 	}
+
 }

@@ -5,5 +5,5 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public interface Validator <T> {
-	boolean doValidate(T tipo, JSONObject propierties) throws InternalException, JSONException;
+	boolean isValid(T value, JSONObject propierties) throws InternalException, JSONException;
 }
