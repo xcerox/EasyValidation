@@ -12,6 +12,6 @@ import org.doit.project.easyvalidation.consts.Empty;
 @Documented
 @Retention(RUNTIME)
 @Target(METHOD)
-public @interface Optional {
+public @interface IsOptional {
 	public boolean checked() default Empty.BOOLEAN;
 }

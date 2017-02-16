@@ -8,12 +8,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import org.doit.project.easyvalidation.consts.Empty;
-import org.doit.projectvalidation.interfaces.impl.PatternValidator;
+import org.doit.project.easyvalidation.interfaces.impl.PatternValidator;
 
 @Documented
 @Retention(RUNTIME)
 @Target(METHOD)
-@Validation(value = PatternValidator.class, id = "PATTERN_VALIDATION")
+@Validation(value = PatternValidator.class, id = "DOIT@PATTERN_VALIDATION")
 public @interface Pattern {
 	
 	@Property

@@ -3,14 +3,19 @@ package org.doit.project.easyvalidation.consts;
 public class LoggerMessage {
 
 	/**
+	 * ENTER_METHOD (Entering).
+	 */
+	public static final String ENTER_METHOD = "Entering";
+
+	/**
 	 * PARAMETER ("Name: {} : Value {}").
 	 */
 	public static final String PARAMETER = "Name: {} : Value {}";
 	
 	/**
-	 * ENTER_METHOD (Entering).
+	 * RETURN_METHOD (Returning: {}).
 	 */
-	public static final String ENTER_METHOD = "Entering";
+	public static final String RETURN_METHOD = "Returning: {}";
 	
 	/**
 	 * EXIT_METHOD (Exiting).

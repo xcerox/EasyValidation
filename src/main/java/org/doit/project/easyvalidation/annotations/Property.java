@@ -7,9 +7,12 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.doit.project.easyvalidation.consts.Empty;
+
 @Documented
 @Retention(RUNTIME)
 @Target(METHOD)
 public @interface Property {
-
+	
+	public String value() default Empty.STRING;
 }

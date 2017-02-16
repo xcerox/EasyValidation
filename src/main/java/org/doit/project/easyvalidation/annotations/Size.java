@@ -8,12 +8,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import org.doit.project.easyvalidation.consts.Empty;
-import org.doit.projectvalidation.interfaces.impl.SizeValidator;
+import org.doit.project.easyvalidation.interfaces.impl.SizeValidator;
 
 @Documented
 @Retention(RUNTIME)
 @Target(METHOD)
-@Validation(value = SizeValidator.class, id = "SIZE_VALIDATOR")
+@Validation(value = SizeValidator.class, id = "DOIT@SIZE_VALIDATOR")
 public @interface Size {
 	
 	@Property

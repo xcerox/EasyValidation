@@ -7,7 +7,7 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import org.doit.projectvalidation.interfaces.Validator;
+import org.doit.project.easyvalidation.interfaces.Validator;
 
 @Documented
 @Retention(RUNTIME)

@@ -8,12 +8,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import org.doit.project.easyvalidation.consts.Empty;
-import org.doit.projectvalidation.interfaces.impl.InStringsValidator;
+import org.doit.project.easyvalidation.interfaces.impl.InStringsValidator;
 
 @Documented
 @Retention(RUNTIME)
 @Target(METHOD)
-@Validation(value = InStringsValidator.class, id="IN_STRINGS")
+@Validation(value = InStringsValidator.class, id="DOIT@IN_STRINGS")
 public @interface InStrings {
 	
 	@Property

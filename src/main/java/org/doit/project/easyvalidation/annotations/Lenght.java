@@ -8,12 +8,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import org.doit.project.easyvalidation.consts.Empty;
-import org.doit.projectvalidation.interfaces.impl.LenghtValidator;
+import org.doit.project.easyvalidation.interfaces.impl.LenghtValidator;
 
 @Documented
 @Retention(RUNTIME)
 @Target(METHOD)
-@Validation(value = LenghtValidator.class, id = "LENGH_VALIDATOR")
+@Validation(value = LenghtValidator.class, id = "DOIT@LENGH_VALIDATOR")
 public @interface Lenght {
 	
 	@Property

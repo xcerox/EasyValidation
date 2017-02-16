@@ -7,12 +7,12 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import org.doit.projectvalidation.interfaces.impl.NotEmptyValidator;
+import org.doit.project.easyvalidation.interfaces.impl.NotEmptyValidator;
 
 @Documented
 @Retention(RUNTIME)
 @Target(METHOD)
-@Validation(value = NotEmptyValidator.class, id = "NOT_EMPTY_VALIDATOR")
+@Validation(value = NotEmptyValidator.class, id = "DOIT@NOT_EMPTY_VALIDATOR")
 public @interface NotEmpty {
 
 }

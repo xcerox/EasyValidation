@@ -7,12 +7,12 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import org.doit.projectvalidation.interfaces.impl.InNumbersValidator;
+import org.doit.project.easyvalidation.interfaces.impl.InNumbersValidator;
 
 @Documented
 @Retention(RUNTIME)
 @Target(METHOD)
-@Validation(value = InNumbersValidator.class, id="IN_NUMBERS")
+@Validation(value = InNumbersValidator.class, id="DOIT@IN_NUMBERS")
 public @interface InNumbers {
 	
 	@Property
