@@ -7,7 +7,7 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import org.doit.projectvalidation.consts.Empty;
+import org.doit.project.easyvalidation.consts.Empty;
 
 @Documented
 @Retention(RUNTIME)
