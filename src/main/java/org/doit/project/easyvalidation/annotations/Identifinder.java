@@ -8,17 +8,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import org.doit.project.easyvalidation.consts.Empty;
-import org.doit.project.easyvalidation.interfaces.impl.InStringsValidator;
 
 @Documented
 @Retention(RUNTIME)
 @Target(METHOD)
-@Validation(value = InStringsValidator.class, id= InStrings.ID)
-public @interface InStrings {
+public @interface Identifinder {
 	
-	public static final String ID = "DOIT@IN_STRINGS";
-	public static final String MULTIPLE_VALUES = "values";
-	
-	@Property(MULTIPLE_VALUES)
-	public String[] values() default {Empty.STRING};
+	public String value() default Empty.STRING;
 }

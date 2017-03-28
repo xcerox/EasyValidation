@@ -17,9 +17,9 @@ import org.doit.project.easyvalidation.interfaces.impl.SizeValidator;
 public @interface Size {
 	
 	@Property
-	public long	min() default Empty.INTEGER;
+	public int min() default Empty.INTEGER;
 	
 	@Property
-	public long max() default Empty.INTEGER;
+	public int max() default Empty.INTEGER;
 }
 	

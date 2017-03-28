@@ -11,7 +11,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
+import org.doit.project.easyvalidation.annotations.Identifinder;
 import org.doit.project.easyvalidation.annotations.IsOptional;
 import org.doit.project.easyvalidation.annotations.Property;
 import org.doit.project.easyvalidation.annotations.Validation;
@@ -31,6 +33,7 @@ public class ValidationCore {
 	private static final String GET = "get";
 	private static final String IS = "is";
 	private Map<Class<?>, Validator<Object>> poolInstances;
+	private Map<String, List<String>> fails;
 	
 	{
 		poolInstances = new HashMap<>();
@@ -40,28 +43,43 @@ public class ValidationCore {
 		super();
 	}
 
-	public Optional<Map<String, List<String>>> validation(final Object pojo, boolean validateOptional) 
+	public boolean validation(final Object pojo, boolean validateOptional) 
 			throws InternalValidationException {
 
 		Collection<Method> methods = new HashSet<>();
-		Map<String, List<String>> fails = null;
+		fails = new HashMap<>();
 		
 		try {
-
-			findMethodsGet(pojo, methods);			
+			findMethodsGet(pojo, methods);	
 			fails = validMethodsGet(pojo, methods, validateOptional);
 			
 		} catch (InstantiationException | IllegalAccessException | InternalException e) {
-
 			throw new InternalValidationException();
 		}
 
+		return fails.isEmpty();
+	}
+	
+	public Optional<Map<String, List<String>>> getFails(){
 		return Optional.of(fails);
-
+	}
+	
+	public Optional<List<String>> getFauls(){
+		Set<String> fauls = new HashSet<>();
+		
+		if (!fails.isEmpty()) {
+			for (String key : fails.keySet()) {
+				for (String value : fails.get(key)){
+					fauls.add(value);
+				}
+			}
+		}
+		
+		return Optional.of((List<String>)fauls);
 	}
 
 	/**
-	 * Find all method get in pjo and in super class.
+	 * Find all method get in pojo and in super class.
 	 * @param pojo
 	 * @param methods
 	 * @throws InstantiationException
@@ -157,7 +175,23 @@ public class ValidationCore {
 			LOGGER.debug("validating existing faults");
 			if (!ValidationUtil.isNullOrEmpty(faults)) {
 				LOGGER.debug("add method with faults");
-				methodsFail.put(currentMethod.getName(), faults);
+				
+				String key = null;
+				
+				if (currentMethod.isAnnotationPresent(Identifinder.class)) {
+					Annotation identifinder = currentMethod.getAnnotation(Identifinder.class);					
+					
+					for (Method currentMethodIdentifinder : identifinder.annotationType().getMethods()) {
+						if (currentMethodIdentifinder.getName().equals("value")) {
+							key = (String)fetchReturnValue(identifinder, currentMethodIdentifinder);
+							break;
+						}	
+					}
+				} else {
+					key = currentMethod.getName();
+				}
+				
+				methodsFail.put(key, faults);
 			}
 		}
 		

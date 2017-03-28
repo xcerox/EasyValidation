@@ -8,9 +8,9 @@ public class LoggerMessage {
 	public static final String ENTER_METHOD = "Entering";
 
 	/**
-	 * PARAMETER ("Name: {} : Value {}").
+	 * PARAMETER ("Name: ({}) | Value: ({})").
 	 */
-	public static final String PARAMETER = "Name: {} : Value {}";
+	public static final String PARAMETER = "Name: ({}) | Value: ({})";
 	
 	/**
 	 * RETURN_METHOD (Returning: {}).

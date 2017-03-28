@@ -15,7 +15,6 @@ public class NotNullValidator implements Validator<Object>{
 	
 	public NotNullValidator() {
 		super();
-		System.out.println("Creando NotNullValidator");
 	}
 
 	@Override

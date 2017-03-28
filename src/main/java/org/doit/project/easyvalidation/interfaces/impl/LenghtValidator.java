@@ -10,7 +10,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LenghtValidator implements Validator<String>{
+public class LenghtValidator implements Validator<String> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LenghtValidator.class);
 
 	public LenghtValidator() {
