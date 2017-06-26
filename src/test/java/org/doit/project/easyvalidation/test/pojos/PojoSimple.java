@@ -1,11 +1,12 @@
 package org.doit.project.easyvalidation.test.pojos;
 
-import org.doit.project.easyvalidation.annotations.Identifinder;
-import org.doit.project.easyvalidation.annotations.InStrings;
-import org.doit.project.easyvalidation.annotations.IsOptional;
-import org.doit.project.easyvalidation.annotations.Lenght;
-import org.doit.project.easyvalidation.annotations.NotNull;
-import org.doit.project.easyvalidation.annotations.Size;
+import org.doit.easyvalidation.annotations.Identifinder;
+import org.doit.easyvalidation.annotations.InNumbers;
+import org.doit.easyvalidation.annotations.InStrings;
+import org.doit.easyvalidation.annotations.IsOptional;
+import org.doit.easyvalidation.annotations.Lenght;
+import org.doit.easyvalidation.annotations.NotNull;
+import org.doit.easyvalidation.annotations.Size;
 
 public class PojoSimple {
 	
@@ -42,6 +43,7 @@ public class PojoSimple {
 
 	@NotNull
 	@Size(min = 0)
+	@InNumbers(values = {25, 30}) 
 	public Integer getEdad() {
 		return edad;
 	}
@@ -51,7 +53,7 @@ public class PojoSimple {
 	}
 
 	@NotNull
-	@InStrings(values = {"AC", "IN"})
+	@InStrings(values = {PojoSimple.Estados.ACTIVO, PojoSimple.Estados.INACTIVO})
 	@Identifinder(PojoSimple.Identifinders.ESTADO)
 	public String getEstado() {
 		return estado;
@@ -70,5 +72,10 @@ public class PojoSimple {
 		public static final String ESTADO = "Estado";
 		public static final String NOMBRE = "Nombre";
 		public static final String APELLIDO = "Apellido";
+	}
+	
+	public static class Estados{
+		public static final String ACTIVO = "AC";
+		public static final String INACTIVO = "IN";
 	}
 }
